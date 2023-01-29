@@ -25,6 +25,6 @@ services:
       - USER=odoo
       - PASSWORD=devx340Test@
     volumes:
-      - ./addons:/mnt/extra-addons
+      - ./odoo_addons:/mnt/extra-addons
     restart: always
     build: .

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- views start -->
+        <!-- employee form view -->
+        <record id="employee_form_view" model="ir.ui.view">
+            <field name="name">Employee Form</field>
+            <field name="model">school.employee</field>
+            <field name="arch" type="xml">
+                <form string="Employee">
+                    <header>
+                        <button name="button_done" string="Done" class="oe_highlight" type="object"/>
+                        <button name="button_reset" string="Reset to Draft" states="done,cancel"
+                                class="oe_highlight" type="object"/>
+                        <button name="button_cancel" string="Cancel" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <field name="photo" widget="image" class="oe_left oe_avatar" />
+                        <div class="oe_title">
+                            <h3>
+                                <field name="name"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="age"/>
+                                <field name="gender"/>
+                            </group>
+                            <group>
+                                <field name="birthday"/>
+                                <field name="employee_group"/>
+                                <field name="nationality"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- employee tree/list view -->
+        <record id="employee_tree_view" model="ir.ui.view">
+            <field name="name">Employee Tree</field>
+            <field name="model">school.employee</field>
+            <field name="arch" type="xml">
+                <tree string="Employees">
+                    <field name="name"/>
+                    <field name="age"/>
+                    <field name="gender"/>
+                    <field name="birthday"/>
+                    <field name="employee_group"/>
+                    <field name="nationality"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- employee search view -->
+        <record id="employee_search_view" model="ir.ui.view">
+            <field name="name">Employees Search View</field>
+            <field name="model">school.employee</field>
+            <field name="arch" type="xml">
+                <search string="Search Employee">
+                    <field name="name"/>
+                    <field name="age"/>
+                    <field name="nationality"/>
+                    <filter string="Male" name="male" domain="[('gender','=','male')]"
+                            help="Employees with gender as Male"/>
+                    <filter string="Female" name="female" domain="[('gender','=','female')]"
+                            help="Employees with gender as Female"/>
+                    <filter string="Others" name="others" domain="[('gender','=','others')]"
+                            help="Employees with gender as Others"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Nationality" name="nationality" context="{'group_by':'nationality'}"/>
+                        <filter string="Group" name="employee_group" context="{'group_by':'employee_group'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- views end -->
+
+        <!-- window action start -->
+        <!-- employees action window -->
+        <record id="employee_menu_action" model="ir.actions.act_window">
+            <field name="name">Employees</field>
+            <field name="res_model">school.employee</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="employee_search_view"/>
+            <field name="context">{'search_default_male': 1}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create The First Employee
+                </p>
+            </field>
+        </record>
+        <!-- window action end -->
+
+        <!-- menu start -->
+        <!-- top level menu: no parent -->
+        <menuitem id="school_menu"
+                  name="School"
+                  groups="base.group_user"/>
+
+        <!-- the following menuitem should appear *after*
+             its parent 'school_menu' and *after* its
+             action 'employee_menu_action' -->
+        <menuitem id="school_employee_menu"
+                  parent="school_menu"
+                  name="Employees"
+                  groups="base.group_user"
+                  action="employee_menu_action"/>
+        <!-- menu end -->
+    </data>
+</odoo>
